@@ -19,8 +19,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import {
     TaskListCloudComponent,
     TaskListCloudSortingModel,
-    FilterRepresentationModel,
-    QueryModel
+    TaskFilterCloudRepresentationModel
 } from '@alfresco/adf-process-services-cloud';
 import { UserPreferencesService } from '@alfresco/adf-core';
 import { Observable } from 'rxjs';
@@ -43,7 +42,7 @@ export class TaskListCloudDemoComponent implements OnInit {
     selectTask: string = '';
     sortArray: TaskListCloudSortingModel[];
 
-    currentFilter: FilterRepresentationModel;
+    currentFilter: TaskFilterCloudRepresentationModel;
 
     constructor(
         private route: ActivatedRoute,
@@ -72,40 +71,7 @@ export class TaskListCloudDemoComponent implements OnInit {
         });
     }
 
-    createFilterRepresentationModel(filter) {
-        const currentFilter = {
-            name: filter.name,
-            query: new QueryModel({
-                state: filter.query.state,
-                sort: filter.query.sort,
-                assignment: '',
-                order: filter.query.order,
-                appName: filter.query.appName
-            })
-        };
-        this.currentFilter = new FilterRepresentationModel(currentFilter);
-    }
-
-    onFilterSelected(filter) {
-        const queryParams = {
-            id: filter.id,
-            filterName: filter.name,
-            status: filter.query.state,
-            assignee: filter.query.assignment,
-            sort: filter.query.sort,
-            order: filter.query.order
-        };
-    }
-
-    onSuccess(filter: FilterRepresentationModel) {
-        const queryParams = this.createQueryParams(filter);
-        this.currentFilter = filter;
-        this.router.navigate([`/cloud/${this.applicationName}/tasks/`], {
-            queryParams: queryParams
-        });
-    }
-
-    onFilterChange(filter: FilterRepresentationModel) {
+    onFilterChange(filter: TaskFilterCloudRepresentationModel) {
         this.status = filter.query.state;
         this.sortArray = [
             {
@@ -113,6 +79,29 @@ export class TaskListCloudDemoComponent implements OnInit {
                 direction: filter.query.order
             }
         ];
+    }
+
+    onSuccess(filter: TaskFilterCloudRepresentationModel) {
+        const queryParams = this.createQueryParams(filter);
+        this.createFilterRepresentationModel(filter);
+        this.router.navigate([`/cloud/${this.applicationName}/tasks/`], {
+            queryParams: queryParams
+        });
+    }
+
+    createFilterRepresentationModel(filter) {
+        this.currentFilter = new TaskFilterCloudRepresentationModel(filter);
+    }
+
+    createQueryParams(filter) {
+        return {
+            id: filter.id,
+            filterName: filter.name,
+            status: filter.query.state,
+            assignee: filter.query.assignment,
+            sort: filter.query.sort,
+            order: filter.query.order
+        };
     }
 
     onChangePageSize(event) {

@@ -7,8 +7,8 @@
 
 <adf-cloud-edit-task-filters
     [taskFilter]="currentFilter"
-    (success)="onSuccess($event)"
-    (filterChange)="onFilterChange($event)">
+    (filterChange)="onFilterChange($event)"
+    (action)="onEditActions($event)">
 </adf-cloud-edit-task-filters>
 <div>
     <adf-cloud-task-list *ngIf="isFilterLoaded" #taskCloud

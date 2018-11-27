@@ -19,11 +19,12 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import {
     TaskListCloudComponent,
     TaskListCloudSortingModel,
-    TaskFilterCloudRepresentationModel
+    TaskFilterCloudRepresentationModel,
 } from '@alfresco/adf-process-services-cloud';
-import { UserPreferencesService } from '@alfresco/adf-core';
+import { UserPreferencesService, TranslationService } from '@alfresco/adf-core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
 
 @Component({
     selector: 'app-task-list-cloud-demo',
@@ -41,13 +42,16 @@ export class TaskListCloudDemoComponent implements OnInit {
     clickedRow: string = '';
     selectTask: string = '';
     sortArray: TaskListCloudSortingModel[];
+    filterName: string = '';
 
     currentFilter: TaskFilterCloudRepresentationModel;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private userPreference: UserPreferencesService
+        private translateService: TranslationService,
+        private userPreference: UserPreferencesService,
+        public dialog: MatDialog
     ) {}
 
     ngOnInit() {
@@ -71,12 +75,12 @@ export class TaskListCloudDemoComponent implements OnInit {
         });
     }
 
-    onFilterChange(filter: TaskFilterCloudRepresentationModel) {
-        this.status = filter.query.state;
+    onFilterChange(query: any) {
+        this.status = query.state;
         this.sortArray = [
             {
-                orderBy: filter.query.sort,
-                direction: filter.query.order
+                orderBy: query.sort,
+                direction: query.order
             }
         ];
     }
@@ -110,5 +114,40 @@ export class TaskListCloudDemoComponent implements OnInit {
 
     onRowClick($event) {
         this.clickedRow = $event;
+    }
+
+    onEditActions(event: any) {
+        if (event.actionType === 'SAVE') {
+            console.log('SAVE');
+        } else if (event.actionType === 'SAVE_AS') {
+            console.log('SAVE_AD');
+        } else if(event.actionType === 'DELETE') {
+            console.log('DELETE');
+        }
+    }
+
+    saveAs() {
+        // this.translateFilterName();
+        // const dialogRef = this.dialog.open(TaskFilterDialogCloudComponent, {
+        //     data: {
+        //         name: this.filterName
+        //     },
+        //     height: 'auto',
+        //     minWidth: '30%'
+        // });
+        // dialogRef.afterClosed().subscribe(result => {
+            // if (result && result.action === TaskFilterDialogCloudComponent.ACTION_SAVE) {
+            //     this.editedTaskFilter.name = result.name;
+            //     this.editedTaskFilter.icon = result.icon;
+            //     this.editedTaskFilter.id = Math.random().toString(36).substr(2, 9),
+            //     this.saveFilter(this.editedTaskFilter);
+            // }
+        // });
+    }
+
+    translateFilterName() {
+        this.translateService.get(this.currentFilter.name).subscribe((message) => {
+            this.filterName = message;
+        });
     }
 }

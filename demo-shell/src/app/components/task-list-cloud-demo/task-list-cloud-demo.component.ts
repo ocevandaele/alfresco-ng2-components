@@ -20,11 +20,14 @@ import {
     TaskListCloudComponent,
     TaskListCloudSortingModel,
     TaskFilterCloudRepresentationModel,
+    TaskFilterCloudService,
+    QueryModel
 } from '@alfresco/adf-process-services-cloud';
 import { UserPreferencesService, TranslationService } from '@alfresco/adf-core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
+import { TaskFilterDialogCloudComponent } from './task-filter-dialog/task-filter-dialog-cloud.component';
 
 @Component({
     selector: 'app-task-list-cloud-demo',
@@ -43,6 +46,7 @@ export class TaskListCloudDemoComponent implements OnInit {
     selectTask: string = '';
     sortArray: TaskListCloudSortingModel[];
     filterName: string = '';
+    editedQuery: QueryModel;
 
     currentFilter: TaskFilterCloudRepresentationModel;
 
@@ -51,7 +55,8 @@ export class TaskListCloudDemoComponent implements OnInit {
         private router: Router,
         private translateService: TranslationService,
         private userPreference: UserPreferencesService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private taskFilterCloudService: TaskFilterCloudService
     ) {}
 
     ngOnInit() {
@@ -76,6 +81,7 @@ export class TaskListCloudDemoComponent implements OnInit {
     }
 
     onFilterChange(query: any) {
+        this.editedQuery = query;
         this.status = query.state;
         this.sortArray = [
             {
@@ -118,31 +124,46 @@ export class TaskListCloudDemoComponent implements OnInit {
 
     onEditActions(event: any) {
         if (event.actionType === 'SAVE') {
-            console.log('SAVE');
+            this.save(this.editedQuery);
         } else if (event.actionType === 'SAVE_AS') {
-            console.log('SAVE_AD');
-        } else if(event.actionType === 'DELETE') {
-            console.log('DELETE');
+            this.saveAs();
+        } else if (event.actionType === 'DELETE') {
+            this.deleteFilter();
         }
     }
 
     saveAs() {
-        // this.translateFilterName();
-        // const dialogRef = this.dialog.open(TaskFilterDialogCloudComponent, {
-        //     data: {
-        //         name: this.filterName
-        //     },
-        //     height: 'auto',
-        //     minWidth: '30%'
-        // });
-        // dialogRef.afterClosed().subscribe(result => {
-            // if (result && result.action === TaskFilterDialogCloudComponent.ACTION_SAVE) {
-            //     this.editedTaskFilter.name = result.name;
-            //     this.editedTaskFilter.icon = result.icon;
-            //     this.editedTaskFilter.id = Math.random().toString(36).substr(2, 9),
-            //     this.saveFilter(this.editedTaskFilter);
-            // }
-        // });
+        this.translateFilterName();
+        const dialogRef = this.dialog.open(TaskFilterDialogCloudComponent, {
+            data: {
+                name: this.filterName
+            },
+            height: 'auto',
+            minWidth: '30%'
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.action === TaskFilterDialogCloudComponent.ACTION_SAVE) {
+                const filter = new TaskFilterCloudRepresentationModel(
+                    {
+                        name: result.name,
+                        icon: result.icon,
+                        id: Math.random().toString(36).substr(2, 9),
+                        key: 'custom-' + result.name,
+                        query: this.editedQuery
+                    }
+                );
+                this.taskFilterCloudService.addFilter(filter);
+            }
+        });
+    }
+
+    save(newQuery: QueryModel) {
+        this.currentFilter.query = newQuery;
+        this.taskFilterCloudService.updateFilter(this.currentFilter);
+    }
+
+    deleteFilter() {
+        this.taskFilterCloudService.deleteFilter(this.currentFilter);
     }
 
     translateFilterName() {

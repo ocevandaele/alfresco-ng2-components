@@ -2,7 +2,7 @@
  * @license
  * Copyright 2016 Alfresco Software, Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the 'License");
+ * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,6 +21,7 @@ import {
     TaskListCloudSortingModel,
     TaskFilterCloudRepresentationModel,
     TaskFilterCloudService,
+    EditTaskFiltersCloudComponent,
     QueryModel
 } from '@alfresco/adf-process-services-cloud';
 import { UserPreferencesService, TranslationService } from '@alfresco/adf-core';
@@ -123,11 +124,11 @@ export class TaskListCloudDemoComponent implements OnInit {
     }
 
     onEditActions(event: any) {
-        if (event.actionType === 'SAVE') {
+        if (event.actionType === EditTaskFiltersCloudComponent.ACTION_SAVE) {
             this.save(this.editedQuery);
-        } else if (event.actionType === 'SAVE_AS') {
+        } else if (event.actionType === EditTaskFiltersCloudComponent.ACTION_SAVE_AS) {
             this.saveAs();
-        } else if (event.actionType === 'DELETE') {
+        } else if (event.actionType === EditTaskFiltersCloudComponent.ACTION_DELETE) {
             this.deleteFilter();
         }
     }

@@ -18,6 +18,7 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import {
     TaskListCloudComponent,
+    TaskFiltersCloudComponent,
     TaskListCloudSortingModel,
     TaskFilterCloudRepresentationModel,
     TaskFilterCloudService,
@@ -39,6 +40,9 @@ export class TaskListCloudDemoComponent implements OnInit {
     @ViewChild('taskCloud')
     taskCloud: TaskListCloudComponent;
 
+    @ViewChild('taskFiltersCloud')
+    taskFiltersCloud: TaskFiltersCloudComponent;
+
     appDefinitionList: Observable<any>;
     applicationName: string = '';
     status: string = '';
@@ -46,7 +50,6 @@ export class TaskListCloudDemoComponent implements OnInit {
     clickedRow: string = '';
     selectTask: string = '';
     sortArray: TaskListCloudSortingModel[];
-    filterName: string = '';
     editedQuery: QueryModel;
 
     currentFilter: TaskFilterCloudRepresentationModel;
@@ -134,10 +137,9 @@ export class TaskListCloudDemoComponent implements OnInit {
     }
 
     saveAs() {
-        this.translateFilterName();
         const dialogRef = this.dialog.open(TaskFilterDialogCloudComponent, {
             data: {
-                name: this.filterName
+                name: this.translateService.instant(this.currentFilter.name)
             },
             height: 'auto',
             minWidth: '30%'
@@ -154,6 +156,7 @@ export class TaskListCloudDemoComponent implements OnInit {
                     }
                 );
                 this.taskFilterCloudService.addFilter(filter);
+                this.taskFiltersCloud.getFilters(this.applicationName);
             }
         });
     }
@@ -161,15 +164,11 @@ export class TaskListCloudDemoComponent implements OnInit {
     save(newQuery: QueryModel) {
         this.currentFilter.query = newQuery;
         this.taskFilterCloudService.updateFilter(this.currentFilter);
+        this.taskFiltersCloud.getFilters(this.applicationName);
     }
 
     deleteFilter() {
         this.taskFilterCloudService.deleteFilter(this.currentFilter);
-    }
-
-    translateFilterName() {
-        this.translateService.get(this.currentFilter.name).subscribe((message) => {
-            this.filterName = message;
-        });
+        this.taskFiltersCloud.getFilters(this.applicationName);
     }
 }

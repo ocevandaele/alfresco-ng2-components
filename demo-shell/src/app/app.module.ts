@@ -69,6 +69,7 @@ import { TaskListCloudDemoComponent } from './components/task-list-cloud-demo/ta
 import { ProcessListCloudExampleComponent } from './components/cloud/process-list-cloud-example.component';
 import { TreeViewSampleComponent } from './components/tree-view/tree-view-sample.component';
 import { AppExtensionsModule } from './extensions/extensions.module';
+import { DocumentListComponent } from './components/document-list/document-list.component';
 
 @NgModule({
     imports: [
@@ -121,7 +122,8 @@ import { AppExtensionsModule } from './extensions/extensions.module';
         ReportIssueComponent,
         TaskListCloudDemoComponent,
         ProcessListCloudExampleComponent,
-        TreeViewSampleComponent
+        TreeViewSampleComponent,
+        DocumentListComponent
     ],
     providers: [
         {

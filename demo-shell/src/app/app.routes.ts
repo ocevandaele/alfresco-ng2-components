@@ -44,6 +44,7 @@ import { CloudComponent } from './components/cloud/cloud.component';
 import { TaskListCloudDemoComponent } from './components/task-list-cloud-demo/task-list-cloud-demo.component';
 import { ProcessListCloudExampleComponent } from './components/cloud/process-list-cloud-example.component';
 import { TreeViewSampleComponent } from './components/tree-view/tree-view-sample.component';
+import { DocumentListComponent } from './components/document-list/document-list.component';
 
 export const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -314,6 +315,10 @@ export const appRoutes: Routes = [
                 path: 'process-list',
                 canActivate: [AuthGuardBpm],
                 loadChildren: 'app/components/process-list-demo/process-list.module#AppProcessListModule'
+            },
+            {
+                path: 'document-list',
+                component: DocumentListComponent
             },
             {
                 path: 'error/:id',

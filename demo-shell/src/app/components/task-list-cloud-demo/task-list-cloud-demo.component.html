@@ -5,11 +5,11 @@
     (filterClick)="onFilterSelected($event)">
 </adf-cloud-task-filters>
 
-<adf-cloud-edit-task-filters
+<adf-cloud-edit-task-filter
     [taskFilter]="currentFilter"
     (filterChange)="onFilterChange($event)"
     (action)="onEditActions($event)">
-</adf-cloud-edit-task-filters>
+</adf-cloud-edit-task-filter>
 <div>
     <adf-cloud-task-list *ngIf="isFilterLoaded" #taskCloud
                          [applicationName]="applicationName"

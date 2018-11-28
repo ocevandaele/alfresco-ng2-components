@@ -22,7 +22,7 @@ import {
     TaskListCloudSortingModel,
     TaskFilterCloudRepresentationModel,
     TaskFilterCloudService,
-    EditTaskFiltersCloudComponent,
+    EditTaskFilterCloudComponent,
     QueryModel
 } from '@alfresco/adf-process-services-cloud';
 import { UserPreferencesService, TranslationService } from '@alfresco/adf-core';
@@ -127,11 +127,11 @@ export class TaskListCloudDemoComponent implements OnInit {
     }
 
     onEditActions(event: any) {
-        if (event.actionType === EditTaskFiltersCloudComponent.ACTION_SAVE) {
+        if (event.actionType === EditTaskFilterCloudComponent.ACTION_SAVE) {
             this.save(this.editedQuery);
-        } else if (event.actionType === EditTaskFiltersCloudComponent.ACTION_SAVE_AS) {
+        } else if (event.actionType === EditTaskFilterCloudComponent.ACTION_SAVE_AS) {
             this.saveAs();
-        } else if (event.actionType === EditTaskFiltersCloudComponent.ACTION_DELETE) {
+        } else if (event.actionType === EditTaskFilterCloudComponent.ACTION_DELETE) {
             this.deleteFilter();
         }
     }

@@ -60,7 +60,7 @@ export class FileViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.params.subscribe(params => {
+        this.route.params.subscribe((params) => {
             const id = params.nodeId;
             if (id) {
                 this.apiService.getInstance().nodes.getNodeInfo(id).then(

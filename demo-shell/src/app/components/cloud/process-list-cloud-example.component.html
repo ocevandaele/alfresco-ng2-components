@@ -55,6 +55,10 @@
             </div>
         </mat-expansion-panel>
     </mat-accordion>
+    <adf-cloud-edit-process-filter
+    [name]="filterName" [appName]="currentAppName" [state]="status" [sort]="sort" [order]="sortDirection">
+
+    </adf-cloud-edit-process-filter>
     <adf-cloud-process-list
                             [applicationName]="currentAppName"
                             [status]="status"
